@@ -46,7 +46,7 @@ for filename in os.listdir(data_dir):
         documents.extend(file_docs)
     except Exception as e:
         st.error(f"Error loading {filename}: {e}")
-
+st.write("Loaded documents:", len(documents))
 # ---------------- Build Vector Store ---------------- #
 if documents:
     text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=50)
