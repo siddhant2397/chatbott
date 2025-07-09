@@ -81,7 +81,7 @@ if documents:
     llm = HuggingFaceEndpoint(
         repo_id="google/flan-t5-base",
         temperature=0.3,
-        max_length=512
+        max_length=512,
         huggingfacehub_api_token=token
     )
 
