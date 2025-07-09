@@ -21,7 +21,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain_huggingface import HuggingFaceEndpoint
 import os
-llm = HuggingFaceHub(repo_id="...", huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN")) 
+llm = HuggingFaceEndpoint(repo_id="...", huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN")) 
 
 
 # ---------------- Setup ---------------- #
