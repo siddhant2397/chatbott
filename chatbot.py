@@ -80,8 +80,9 @@ if documents:
 
     llm = HuggingFaceEndpoint(
         repo_id="google/flan-t5-base",
-        huggingfacehub_api_token=token,
-        model_kwargs={"temperature": 0.3, "max_length": 512}
+        temperature=0.3,
+        max_length=512
+        huggingfacehub_api_token=token
     )
 
     qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
