@@ -72,9 +72,9 @@ if documents:
         st.stop()
 
     llm = HuggingFaceEndpoint(
-        repo_id="google/flan-t5-base",
+        repo_id="tiiuae/falcon-7b-instruct",
         temperature=0.3,
-        model_kwargs={"max_length": 512},
+        model_kwargs={"max_new_tokens": 512},
         huggingfacehub_api_token=token
     )
 
