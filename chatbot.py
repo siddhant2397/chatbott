@@ -9,8 +9,6 @@ Original file is located at
 
 
 
-import os
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
 
 # HR Chatbot Web App using Streamlit + LangChain + Static Files from GitHub
 
@@ -22,6 +20,9 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain_community.llms import HuggingFaceHub
+import os
+llm = HuggingFaceHub(repo_id="...", huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN")) 
+
 
 # ---------------- Setup ---------------- #
 st.set_page_config(page_title="CISF Chatbot", layout="wide")
