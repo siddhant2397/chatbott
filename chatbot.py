@@ -35,13 +35,14 @@ os.makedirs(data_dir, exist_ok=True)
 documents = []
 for filename in os.listdir(data_dir):
     path = os.path.join(data_dir, filename)
-    if filename.endswith(".pdf"):
-        loader = PyPDFLoader(path)
-    elif filename.endswith(".xlsx"):
-        loader = UnstructuredExcelLoader(path)
-    else:
-        continue
-    file_docs = loader.load()
+    try:
+        if filename.endswith(".pdf"):
+            loader = PyPDFLoader(path)
+        elif filename.endswith(".xlsx"):
+            loader = UnstructuredExcelLoader(path)
+        else:
+            continue
+        file_docs = loader.load()
         documents.extend(file_docs)
     except Exception as e:
         st.error(f"Error loading {filename}: {e}")
