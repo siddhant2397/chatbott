@@ -81,7 +81,7 @@ if documents:
     llm = HuggingFaceEndpoint(
         repo_id="google/flan-t5-base",
         temperature=0.3,
-        max_length=512,
+        model_kwargs={"max_length": 512},
         huggingfacehub_api_token=token
     )
 
@@ -92,7 +92,7 @@ if documents:
 
     if query:
         with st.spinner("🤔 Thinking..."):
-            response = qa_chain.run(query)
+            response = qa_chain.invoke({"question":query})
         st.success(response)
 else:
     st.warning("No documents found. Please add files to the 'data/' folder in your GitHub repo.")
