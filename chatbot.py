@@ -74,7 +74,7 @@ if documents:
     llm = HuggingFaceEndpoint(
         repo_id="tiiuae/falcon-7b-instruct",
         temperature=0.3,
-        model_kwargs={"max_new_tokens": 512},
+        max_new_tokens=512,
         huggingfacehub_api_token=token
     )
 
