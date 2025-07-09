@@ -49,7 +49,7 @@ for filename in os.listdir(data_dir):
 
 # ---------------- Build Vector Store ---------------- #
 if documents:
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     chunks = text_splitter.split_documents(documents)
 
     if not chunks:
