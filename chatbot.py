@@ -72,7 +72,7 @@ if documents:
         st.stop()
 
     llm = HuggingFaceEndpoint(
-        repo_id="bigscience/bloom",
+        repo_id="tiiuae/falcon-rw-1b",
         temperature=0.3,
         max_new_tokens=512,
         huggingfacehub_api_token=token
