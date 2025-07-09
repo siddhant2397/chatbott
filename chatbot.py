@@ -1,27 +1,16 @@
-# -*- coding: utf-8 -*-
-
-
-
-
-
-# HR Chatbot Web App using Streamlit + LangChain + Static Files from GitHub
-
 import streamlit as st
 import os
 from langchain_community.document_loaders import PyPDFLoader, UnstructuredExcelLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.chains import RetrievalQA
-from langchain_huggingface import HuggingFaceEndpoint
-llm = HuggingFaceEndpoint(repo_id="...", huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN")) 
 
-
-# ---------------- Setup ---------------- #
-st.set_page_config(page_title="CISF Chatbot", layout="wide")
+# Set up page
+st.set_page_config(page_title="📘 CISF Chatbot", layout="wide")
 st.title("🤖 CISF Chatbot - Ask Your Query")
 
-# ---------------- Load Files from data/ folder ---------------- #
+# Load files
 data_dir = "data"
 os.makedirs(data_dir, exist_ok=True)
 
@@ -35,59 +24,44 @@ for filename in os.listdir(data_dir):
             loader = UnstructuredExcelLoader(path)
         else:
             continue
-        file_docs = loader.load()
-        documents.extend(file_docs)
+        docs = loader.load()
+        documents.extend(docs)
     except Exception as e:
-        st.error(f"Error loading {filename}: {e}")
-st.write("Loaded documents:", len(documents))
-# ---------------- Build Vector Store ---------------- #
+        st.error(f"❌ Failed to load {filename}: {e}")
+
+st.write(f"📄 Loaded {len(documents)} documents")
+
+# Build vector store
 if documents:
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     chunks = text_splitter.split_documents(documents)
 
     if not chunks:
-        st.error("❌ No text chunks created. Adjust chunk size or check document content.")
+        st.error("❌ No text chunks created. Check chunk size or document contents.")
         st.stop()
 
-    try:
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    except Exception as e:
-        st.error(f"❌ Error loading embedding model: {e}")
-        st.stop()
+    # Load OpenAI API key from Streamlit secrets
+    api_key = st.secrets["OPENAI_API_KEY"]
 
-    try:
-        db = FAISS.from_documents(chunks, embeddings)
-    except IndexError:
-        st.error("❌ No embeddings could be generated. Check if documents are valid and non-empty.")
-        st.stop()
-    except Exception as e:
-        st.error(f"❌ Error creating FAISS vector store: {e}")
-        st.stop()
-
+    embeddings = OpenAIEmbeddings(openai_api_key=api_key)
+    db = FAISS.from_documents(chunks, embeddings)
     retriever = db.as_retriever()
 
-    token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-    if not token:
-        st.error("❌ Hugging Face API token not found. Add it to Streamlit secrets or a .env file.")
-        st.stop()
-
-    llm = HuggingFaceEndpoint(
-        repo_id="tiiuae/falcon-instruct-1b",
+    llm = ChatOpenAI(
+        model_name="gpt-3.5-turbo",
         temperature=0.3,
-        max_new_tokens=512,
-        huggingfacehub_api_token=token
+        openai_api_key=api_key
     )
 
     qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
 
     st.subheader("💬 Ask a question")
-    query = st.text_input("Type your question here...")
+    query = st.text_input("Type your question here:")
 
     if query:
-        with st.spinner("🤔 Thinking..."):
+        with st.spinner("🤖 Thinking..."):
             response = qa_chain.invoke({"query": query})
-        st.success("Answer")
+        st.success("✅ Answer")
         st.write(response)
 else:
-    st.warning("No documents found. Please add files to the 'data/' folder in your GitHub repo.")
-
+    st.warning("⚠️ No documents found in the 'data/' folder.")
