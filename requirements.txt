@@ -1,6 +1,7 @@
 ﻿streamlit
 langchain
 langchain-community
+langchain-huggingface
 faiss-cpu
 PyMuPDF
 pandas
