@@ -52,7 +52,7 @@ if documents:
     db = FAISS.from_documents(chunks, embeddings)
     retriever = db.as_retriever()
 
-    llm = HuggingFaceHub(
+    llm = HuggingFaceEndpoint(
         repo_id="google/flan-t5-base",
         model_kwargs={"temperature": 0.3, "max_length": 512}
     )
