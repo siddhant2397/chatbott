@@ -1,10 +1,6 @@
 ﻿streamlit
 langchain
 langchain-community
-langchain-huggingface
+openai
+langchain-openai
 faiss-cpu
-PyMuPDF
-pandas
-unstructured
-sentence-transformers
-huggingface-hub
