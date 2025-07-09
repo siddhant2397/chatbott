@@ -19,7 +19,7 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
-from langchain_community.llms import HuggingFaceHub
+from langchain_huggingface import HuggingFaceEndpoint
 import os
 llm = HuggingFaceHub(repo_id="...", huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN")) 
 
