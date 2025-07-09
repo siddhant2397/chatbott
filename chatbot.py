@@ -85,7 +85,7 @@ if documents:
 
     if query:
         with st.spinner("🤔 Thinking..."):
-            response = qa_chain.invoke({"question": query})
+            response = qa_chain.invoke({"query": query})
         st.success("Answer")
         st.write(response)
 else:
